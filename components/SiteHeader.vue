@@ -1,20 +1,13 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import logoImage from '~/assets/images/logo.png'
 
-// 当前路由用于判断导航激活态
 const route = useRoute()
-
-// 根据 URL 第一段解析当前语言
 const locale = computed(() => normalizeLocale(route.path.split('/')[1]))
 const ui = computed(() => getUiContent(locale.value))
 
-// 移动端菜单开关
 const mobileMenuOpen = ref(false)
-
-// 根据滚动状态增强头部阴影和边界层次
 const isElevated = ref(false)
 
-// 顶部导航配置
 const navItems = computed(() => [
   { label: ui.value.nav.home, href: `/${locale.value}` },
   { label: ui.value.nav.products, href: `/${locale.value}/products` },
@@ -23,7 +16,6 @@ const navItems = computed(() => [
   { label: ui.value.nav.contact, href: `/${locale.value}/contact` }
 ])
 
-// 判断当前导航是否处于激活状态
 function isActive(target: string) {
   if (target === `/${locale.value}`) {
     return route.path === target
@@ -47,7 +39,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', handleScroll)
 })
 
-// 切换路由后自动关闭移动端菜单
 watch(
   () => route.fullPath,
   () => {
@@ -57,43 +48,38 @@ watch(
 </script>
 
 <template>
-  <!-- 固定头部：白底 + 柔和阴影 + 轻微磨砂，保证在首屏大图上也清晰 -->
   <header
-    class="fixed inset-x-0 top-0 z-50 border-b border-slate-200/90 bg-white/95 backdrop-blur"
-    :class="isElevated ? 'shadow-[0_18px_40px_rgba(15,23,42,0.12)]' : 'shadow-[0_8px_22px_rgba(15,23,42,0.06)]'"
+    class="fixed inset-x-0 top-0 z-50 bg-white"
+    :class="isElevated ? 'shadow-[0_18px_40px_rgba(15,23,42,0.12)]' : 'shadow-[0_8px_22px_rgba(15,23,42,0.05)]'"
   >
-    <div class="shell grid grid-cols-[1fr_auto] items-center gap-3 py-3 md:grid-cols-[auto_1fr_auto] md:gap-6 md:py-4">
-      <!-- 左侧品牌区 -->
-      <NuxtLink :to="`/${locale}`" class="flex min-w-0 items-center gap-3">
+    <div class="shell grid grid-cols-[minmax(14rem,1fr)_auto] items-center gap-4 py-3 md:grid-cols-[minmax(18rem,1fr)_auto_minmax(18rem,1fr)] md:gap-8 md:py-4">
+      <NuxtLink :to="`/${locale}`" class="flex min-w-0 items-center justify-self-start">
         <img
           :src="logoImage"
-          alt="Luoschai logo"
-          class="h-9 w-auto max-w-[9rem] object-contain sm:h-10 sm:max-w-[10rem]"
+          alt="ROTHSCHILD logo"
+          class="h-[3.75rem] w-auto max-w-[15rem] object-contain sm:h-[4.1rem] sm:max-w-[17rem] lg:h-[4.45rem] lg:max-w-[18.5rem]"
         >
-        <p class="truncate text-sm font-semibold tracking-[0.18em] text-slate-900">LUOSCHAI</p>
       </NuxtLink>
 
-      <!-- 桌面端导航 -->
-      <div class="hidden min-w-0 justify-center md:flex">
-        <nav class="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-slate-200 bg-slate-50/95 p-1.5">
+      <div class="hidden min-w-0 justify-self-center md:flex">
+        <nav class="flex items-center gap-12 lg:gap-14">
           <NuxtLink
             v-for="item in navItems"
             :key="item.href"
             :to="item.href"
-            class="relative min-w-max rounded-full px-4 py-2.5 text-sm font-medium whitespace-nowrap transition-all duration-300"
-            :class="
-              isActive(item.href)
-                ? 'bg-slate-900 text-white shadow-[0_10px_22px_rgba(15,23,42,0.22)]'
-                : 'text-slate-600 hover:bg-white hover:text-slate-900'
-            "
+            class="group relative py-3 text-[1rem] font-semibold tracking-[0.02em] transition-colors duration-300"
+            :class="isActive(item.href) ? 'text-slate-950' : 'text-slate-500 hover:text-slate-900'"
           >
-            {{ item.label }}
+            <span class="relative z-[1] whitespace-nowrap">{{ item.label }}</span>
+            <span
+              class="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] rounded-full bg-gradient-to-r from-sky-500 via-blue-600 to-slate-900 transition-all duration-300"
+              :class="isActive(item.href) ? 'opacity-100' : 'opacity-0 group-hover:opacity-40'"
+            />
           </NuxtLink>
         </nav>
       </div>
 
-      <!-- 右侧操作区：桌面端语言切换 + 移动端菜单按钮 -->
-      <div class="flex items-center gap-2 md:gap-3">
+      <div class="flex items-center justify-self-end gap-2 md:gap-3">
         <div class="hidden md:block">
           <LanguageSwitcher :locale="locale" />
         </div>
@@ -130,7 +116,6 @@ watch(
       </div>
     </div>
 
-    <!-- 移动端下拉导航 -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
       enter-from-class="opacity-0 -translate-y-2"

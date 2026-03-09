@@ -1,4 +1,4 @@
-interface InquiryBody {
+﻿interface InquiryBody {
   name?: string
   contact?: string
   product?: string
@@ -44,7 +44,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const subject = encodeURIComponent(`[${payload.locale.toUpperCase()}] Luoschai Inquiry - ${payload.product}`)
+  const subject = encodeURIComponent(`[${payload.locale.toUpperCase()}] ROTHSCHILD Inquiry - ${payload.product}`)
   const bodyText = encodeURIComponent(
     [
       `Name / Company: ${payload.name}`,
@@ -68,3 +68,4 @@ export default defineEventHandler(async (event) => {
     recipientEmail
   }
 })
+

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { productImageBySlug } from '~/data/media'
 // 路由参数：语言 + 产品分类 slug
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.params.locale as string))
@@ -10,17 +11,7 @@ const productSlugs = getProductSlugs()
 const detail = computed(() => getProductDetail(locale.value, slug.value))
 
 // 产品详情主视觉图：先按分类映射占位图
-const heroImageBySlug: Record<string, string> = {
-  'server-cpu': 'https://images.unsplash.com/photo-1555617981-dac3880eac6e?auto=format&fit=crop&w=1400&q=80',
-  'gpu-accelerators': 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=1400&q=80',
-  'memory-modules': 'https://images.unsplash.com/photo-1562976540-1502c2145186?auto=format&fit=crop&w=1400&q=80',
-  'enterprise-ssd': 'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1400&q=80',
-  'enterprise-hdd': 'https://images.unsplash.com/photo-1540829917886-91ab031b1764?auto=format&fit=crop&w=1400&q=80',
-  'network-interface': 'https://images.unsplash.com/photo-1517420879524-86d64ac2f339?auto=format&fit=crop&w=1400&q=80',
-  'optical-modules': 'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&w=1400&q=80',
-  'server-systems': 'https://images.unsplash.com/photo-1551808525-51a94da548ce?auto=format&fit=crop&w=1400&q=80'
-}
-const heroImage = computed(() => heroImageBySlug[slug.value] ?? heroImageBySlug['server-cpu'])
+const heroImage = computed(() => productImageBySlug[slug.value] ?? productImageBySlug['server-cpu'])
 
 // 根据 slug 反查对应产品分类，用于读取分类标题和高亮标签
 const category = computed(() => {

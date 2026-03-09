@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { productGalleryImages } from '~/data/media'
 // 当前语言、页面内容与产品 slug
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.params.locale as string))
@@ -45,16 +46,7 @@ const productCards = computed(() =>
 )
 
 // 产品配图：后续可以直接替换为你的正式产品图
-const productImages = [
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1562976540-1502c2145186?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1555617981-dac3880eac6e?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1517420879524-86d64ac2f339?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1551808525-51a94da548ce?auto=format&fit=crop&w=1400&q=80'
-]
+const productImages = productGalleryImages
 
 useHead(() => ({
   htmlAttrs: { lang: locale.value },

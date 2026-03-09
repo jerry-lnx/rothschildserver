@@ -1,4 +1,4 @@
-export default defineNuxtConfig({
+﻿export default defineNuxtConfig({
   compatibilityDate: '2025-01-15',
   devtools: { enabled: false },
   experimental: {
@@ -65,11 +65,18 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'en'
       },
-      title: '罗斯柴智算',
+      title: 'ROTHSCHILD',
       meta: [
         {
           name: 'viewport',
           content: 'width=device-width, initial-scale=1'
+        }
+      ],
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/png',
+          href: '/images/logo_icon.png'
         }
       ]
     }

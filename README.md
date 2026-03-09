@@ -1,6 +1,6 @@
-# Luoschai Official Site
+﻿# ROTHSCHILD Official Site
 
-Nuxt 3 + Tailwind CSS + three-language official site starter for `罗斯柴智算`.
+Nuxt 3 + Tailwind CSS + three-language official site starter for `缃楁柉鏌存櫤绠梎.
 
 ## Tech Baseline
 
@@ -16,3 +16,4 @@ Nuxt 3 + Tailwind CSS + three-language official site starter for `罗斯柴智�
 - Current language is remembered in the `preferred_locale` cookie
 - Page structure is shared while content is split by locale in `data/content.ts`
 - Shared UI labels live in `data/ui.ts`
+

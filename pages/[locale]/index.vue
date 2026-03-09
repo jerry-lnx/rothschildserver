@@ -1,87 +1,72 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Autoplay, FreeMode } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/free-mode'
-// 解析当前语言参数
+import { brandLogoMap, productGalleryImages, scenarioImageMap } from '~/data/media'
+
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.params.locale as string))
-
-// 拉取当前语言内容与 UI 文案
 const content = computed(() => getSiteContent(locale.value))
 const ui = computed(() => getUiContent(locale.value))
 
-// 首页产品展示数据
 const productCards = computed(() => content.value.home.categories)
+const categoryImages = productGalleryImages
 
-// 产品卡片配图（后续可替换为本地素材）
-const categoryImages = [
-  'https://images.unsplash.com/photo-1555617981-dac3880eac6e?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1517420879524-86d64ac2f339?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1540829917886-91ab031b1764?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80',
-  'https://images.unsplash.com/photo-1527430253228-e93688616381?auto=format&fit=crop&w=1400&q=80'
-]
-
-// 供货场景：保留对成交有帮助的真实采购场景
 const scenarioCardsByLocale = {
   zh: [
     {
       title: '数据中心扩容采购',
       desc: '按机柜与节点批次组织配件清单，支持分批到货与阶段验收。',
-      image: 'https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=1400&q=80'
+      image: scenarioImageMap.expansion
     },
     {
       title: 'AI 算力节点上线',
       desc: '围绕 GPU、网卡、光模块与存储形成配套供货组合，缩短项目上线周期。',
-      image: 'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&w=1400&q=80'
+      image: scenarioImageMap.ai
     },
     {
       title: '运维替换与长期补货',
       desc: '适用于故障替换、常态维护和年度补货计划，降低停机与断供风险。',
-      image: 'https://images.unsplash.com/photo-1551808525-51a94da548ce?auto=format&fit=crop&w=1400&q=80'
+      image: scenarioImageMap.maintenance
     }
   ],
   en: [
     {
       title: 'Data Center Expansion',
-      desc: 'Component lists by rack/node batches with phased receiving and acceptance.',
-      image: 'https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=1400&q=80'
+      desc: 'Component lists by rack and node batches with phased receiving and acceptance.',
+      image: scenarioImageMap.expansion
     },
     {
       title: 'AI Compute Node Launch',
       desc: 'Coordinated supply for GPU, NIC, optical, and storage to shorten launch cycles.',
-      image: 'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&w=1400&q=80'
+      image: scenarioImageMap.ai
     },
     {
-      title: 'Maintenance & Replenishment',
+      title: 'Maintenance and Replenishment',
       desc: 'Built for replacement, operations, and scheduled recurring supply.',
-      image: 'https://images.unsplash.com/photo-1551808525-51a94da548ce?auto=format&fit=crop&w=1400&q=80'
+      image: scenarioImageMap.maintenance
     }
   ],
   ru: [
     {
-      title: 'Расширение дата-центра',
-      desc: 'Поставка партиями по стойкам и узлам с поэтапной приемкой.',
-      image: 'https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=1400&q=80'
+      title: 'Закупка для расширения дата-центра',
+      desc: 'Поставка комплектующих партиями по стойкам и узлам с поэтапной приемкой.',
+      image: scenarioImageMap.expansion
     },
     {
       title: 'Запуск AI-узлов',
-      desc: 'Комплексная поставка GPU, сетевых и оптических модулей и хранения.',
-      image: 'https://images.unsplash.com/photo-1516110833967-0b5716ca1387?auto=format&fit=crop&w=1400&q=80'
+      desc: 'Комплексная поставка GPU, сетевых карт, оптики и хранения для более быстрого запуска.',
+      image: scenarioImageMap.ai
     },
     {
-      title: 'Замена и пополнение',
-      desc: 'Сценарий для эксплуатации, аварийной замены и планового пополнения.',
-      image: 'https://images.unsplash.com/photo-1551808525-51a94da548ce?auto=format&fit=crop&w=1400&q=80'
+      title: 'Замена и регулярное пополнение',
+      desc: 'Подходит для аварийной замены, текущей эксплуатации и планового пополнения.',
+      image: scenarioImageMap.maintenance
     }
   ]
 } as const
 
-// 采购保障模块，强调可执行性
 const assuranceItemsByLocale = {
   zh: [
     { title: '型号匹配', desc: '按平台代际、接口与兼容要求确认型号，减少错配。' },
@@ -96,17 +81,16 @@ const assuranceItemsByLocale = {
     { title: 'Recurring Supply', desc: 'Planned replenishment for long-cycle maintenance operations.' }
   ],
   ru: [
-    { title: 'Подбор моделей', desc: 'Проверка платформы, интерфейсов и совместимости до размещения заказа.' },
+    { title: 'Подбор моделей', desc: 'Проверка поколения платформы, интерфейсов и совместимости до заказа.' },
     { title: 'Ценовая стратегия', desc: 'Закупка партиями и циклами для контроля совокупной стоимости.' },
-    { title: 'Координация поставки', desc: 'Прозрачные этапы доставки, партий и приемки.' },
+    { title: 'Координация поставки', desc: 'Прозрачные этапы по срокам, партиям и приемке.' },
     { title: 'Регулярное пополнение', desc: 'План поставки для долгосрочной эксплуатации и замены.' }
   ]
 } as const
 
-// 首页询价模块文案
 const quoteStripByLocale = {
   zh: {
-    title: '有明确型号或采购清单？',
+    title: '有明确型号或采购清单吗？',
     desc: '可直接提交型号、数量与交付时间，我们会按企业采购方式快速跟进。',
     primary: '提交询价',
     secondary: '查看产品中心',
@@ -137,40 +121,6 @@ const quoteStripByLocale = {
   }
 } as const
 
-// 首页模块标题右侧说明卡：只服务首页视觉，不给内页复用
-const homeSectionNotesByLocale = {
-  zh: {
-    products: '按常见采购判断路径梳理品类，先让客户快速知道您卖什么。',
-    solutions: '围绕扩容、上线、替换三类高频场景组织内容，避免只剩概念描述。',
-    capabilities: '从型号确认到持续补货，把采购支持能力拆成更容易理解的服务动作。',
-    brands: '展示长期可协同的主流品牌生态，强调稳定供货而不是单次交易。'
-  },
-  en: {
-    products: 'Organized around how buyers assess categories first: what is available and what fits.',
-    solutions: 'Built around expansion, launch, and replacement instead of abstract messaging.',
-    capabilities: 'Break down support from model confirmation to recurring replenishment.',
-    brands: 'Showcase long-term brand coverage and supply continuity rather than one-off trading.'
-  },
-  ru: {
-    products: 'Структура построена вокруг типового выбора категорий: что доступно и что подходит.',
-    solutions: 'Содержание собрано по сценариям расширения, запуска и замены, а не вокруг абстрактных формулировок.',
-    capabilities: 'Поддержка показана как понятные действия: от подбора моделей до регулярного пополнения.',
-    brands: 'Блок подчеркивает охват ключевых брендов и стабильность поставок, а не разовые сделки.'
-  }
-} as const
-
-// 品牌 logo 映射：优先使用稳定的图标源，便于后续替换成正式品牌素材
-const brandLogoMap: Record<string, string> = {
-  Intel: 'https://cdn.simpleicons.org/intel/2563eb',
-  AMD: 'https://cdn.simpleicons.org/amd/2563eb',
-  NVIDIA: 'https://cdn.simpleicons.org/nvidia/2563eb',
-  Samsung: 'https://cdn.simpleicons.org/samsung/2563eb',
-  Micron: 'https://cdn.simpleicons.org/microntechnology/2563eb',
-  Broadcom: 'https://cdn.simpleicons.org/broadcom/2563eb',
-  Seagate: 'https://cdn.simpleicons.org/seagate/2563eb',
-  'Western Digital': 'https://cdn.simpleicons.org/westerndigital/2563eb'
-}
-
 const brandCards = computed(() =>
   content.value.home.brands.map((brand) => ({
     name: brand,
@@ -178,9 +128,7 @@ const brandCards = computed(() =>
   }))
 )
 
-// 品牌区改为分页自动轮播，保证用户能明确看到“在轮播”
 const brandCarouselModules = [Autoplay, FreeMode]
-
 const scenarioCards = computed(() => scenarioCardsByLocale[locale.value])
 const assuranceItems = computed(() => assuranceItemsByLocale[locale.value])
 const quoteStrip = computed(() => quoteStripByLocale[locale.value])

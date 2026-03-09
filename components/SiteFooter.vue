@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import logoImage from '~/assets/images/logo.png'
 
 const route = useRoute()
@@ -18,7 +18,7 @@ const footerLabelsByLocale = {
     products: '主营品类',
     contact: '联系方式',
     summary: '服务器配件采购与供应服务商',
-    availability: '企业级供货支持',
+    availability: '7×24 小时快速响应',
     copyright: '版权所有'
   },
   en: {
@@ -26,7 +26,7 @@ const footerLabelsByLocale = {
     products: 'Categories',
     contact: 'Contact',
     summary: 'Server component sourcing and supply partner',
-    availability: 'Enterprise Supply Support',
+    availability: '24/7 Rapid Response',
     copyright: 'Copyright'
   },
   ru: {
@@ -34,7 +34,7 @@ const footerLabelsByLocale = {
     products: 'Категории',
     contact: 'Контакты',
     summary: 'Поставщик серверных комплектующих',
-    availability: 'Корпоративная поставка',
+    availability: 'Быстрый ответ 24/7',
     copyright: 'Copyright'
   }
 } as const
@@ -51,23 +51,17 @@ const footerLabels = computed(() => footerLabelsByLocale[locale.value])
         <div class="pointer-events-none absolute left-0 top-6 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl" />
         <div class="pointer-events-none absolute right-12 top-10 h-28 w-28 rounded-full bg-sky-400/15 blur-3xl" />
 
-        <div class="relative grid gap-10 lg:grid-cols-[1.35fr_0.85fr_1fr_1fr]">
-          <div class="max-w-sm">
-            <div class="flex items-center gap-4">
-              <div class="flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-700/80 bg-white/95 shadow-[0_12px_30px_rgba(15,23,42,0.25)]">
-                <img :src="logoImage" alt="Luoschai logo" class="h-8 w-auto object-contain">
-              </div>
-              <div>
-                <p class="text-3xl font-semibold tracking-[0.08em] text-white">LUOSCHAI</p>
-                <p class="mt-1 text-xs font-semibold uppercase tracking-[0.28em] text-blue-300">
-                  {{ footerLabels.availability }}
-                </p>
+        <div class="relative grid gap-10 lg:grid-cols-[1.1fr_0.72fr_0.9fr_1.38fr] lg:gap-8">
+          <div class="lg:pr-6">
+            <div class="rounded-[1.75rem] border border-slate-800/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(15,23,42,0.06))] p-6 shadow-[0_18px_40px_rgba(2,6,23,0.18)]">
+              <img :src="logoImage" alt="ROTHSCHILD logo" class="h-16 w-auto object-contain sm:h-20">
+              <p class="mt-6 text-sm leading-7 text-slate-300">
+                {{ footerLabels.summary }}
+              </p>
+              <div class="mt-6 inline-flex items-center rounded-full border border-blue-400/25 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-100">
+                {{ footerLabels.availability }}
               </div>
             </div>
-
-            <p class="mt-6 text-base leading-8 text-slate-300">
-              {{ footerLabels.summary }}
-            </p>
           </div>
 
           <div>
@@ -87,7 +81,7 @@ const footerLabels = computed(() => footerLabelsByLocale[locale.value])
             <p class="text-sm font-semibold tracking-[0.18em] text-slate-100">
               {{ footerLabels.products }}
             </p>
-            <div class="mt-5 flex max-w-xs flex-wrap gap-3">
+            <div class="mt-5 flex flex-wrap gap-3">
               <span
                 v-for="item in footerCategories"
                 :key="item"
@@ -98,35 +92,55 @@ const footerLabels = computed(() => footerLabelsByLocale[locale.value])
             </div>
           </div>
 
-          <div>
+          <div class="lg:min-w-0">
             <p class="text-sm font-semibold tracking-[0.18em] text-slate-100">
               {{ footerLabels.contact }}
             </p>
             <div class="mt-5 grid gap-5 text-[1.05rem] text-slate-300">
-              <a :href="`tel:${content.site.phone}`" class="flex items-center gap-4 transition-colors duration-300 hover:text-white">
-                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800/70 text-blue-300">
+              <div class="grid grid-cols-[2.25rem_minmax(0,1fr)] items-start gap-4">
+                <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800/70 text-blue-300">
                   <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
                     <path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.11.37 2.3.56 3.52.56a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.85 21 3 13.15 3 3.99a1 1 0 0 1 1-1H7.5a1 1 0 0 1 1 1c0 1.22.19 2.41.56 3.52a1 1 0 0 1-.24 1.01l-2.2 2.27Z" />
                   </svg>
                 </span>
-                <span>{{ content.site.phone }}</span>
-              </a>
-              <a :href="`mailto:${content.site.email}`" class="flex items-center gap-4 transition-colors duration-300 hover:text-white">
-                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800/70 text-blue-300">
+                <div class="grid gap-2 min-w-0">
+                  <a
+                    v-for="phone in content.site.phones"
+                    :key="phone"
+                    :href="`tel:${phone}`"
+                    class="whitespace-nowrap transition-colors duration-300 hover:text-white"
+                  >
+                    {{ phone }}
+                  </a>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-[2.25rem_minmax(0,1fr)] items-start gap-4">
+                <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800/70 text-blue-300">
                   <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
                     <path d="M4 5h16a2 2 0 0 1 2 2v.35l-10 6.25L2 7.35V7a2 2 0 0 1 2-2Zm18 4.65V17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.65l9.47 5.92a1 1 0 0 0 1.06 0L22 9.65Z" />
                   </svg>
                 </span>
-                <span>{{ content.site.email }}</span>
-              </a>
-              <p class="flex items-center gap-4 leading-8">
-                <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800/70 text-blue-300">
+                <div class="grid gap-2 min-w-0">
+                  <a
+                    v-for="email in content.site.emails"
+                    :key="email"
+                    :href="`mailto:${email}`"
+                    class="whitespace-nowrap text-[0.98rem] transition-colors duration-300 hover:text-white"
+                  >
+                    {{ email }}
+                  </a>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-[2.25rem_minmax(0,1fr)] items-start gap-4 leading-7">
+                <span class="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-700 bg-slate-800/70 text-blue-300">
                   <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
                     <path d="M12 2a7 7 0 0 1 7 7c0 4.78-5.18 10.65-6.3 11.88a1 1 0 0 1-1.4 0C10.18 19.65 5 13.78 5 9a7 7 0 0 1 7-7Zm0 9.5A2.5 2.5 0 1 0 12 6.5a2.5 2.5 0 0 0 0 5Z" />
                   </svg>
                 </span>
-                <span>{{ content.site.address }}</span>
-              </p>
+                <span class="max-w-[28rem] text-pretty">{{ content.site.address }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -134,10 +148,10 @@ const footerLabels = computed(() => footerLabelsByLocale[locale.value])
         <div class="relative mt-12 border-t border-slate-800/90 pt-8">
           <div class="flex flex-col gap-3 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
             <p>{{ footerLabels.copyright }} {{ content.site.companyNameEn }} 2026</p>
-            <p>{{ content.site.companyNameEn }}</p>
           </div>
         </div>
       </div>
     </div>
   </footer>
 </template>
+

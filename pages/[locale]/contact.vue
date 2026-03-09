@@ -1,27 +1,12 @@
-<script setup lang="ts">
-// 路由、内容与运行时配置
+﻿<script setup lang="ts">
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.params.locale as string))
 const content = computed(() => getSiteContent(locale.value))
 const ui = computed(() => getUiContent(locale.value))
-const runtimeConfig = useRuntimeConfig()
 
-// 公司地图坐标：当前按深圳南山区默认展示
-const mapCenter = {
-  lat: 22.54286,
-  lng: 113.95814
-}
+const mapQuery = computed(() => encodeURIComponent(content.value.site.address))
+const mapFrameUrl = computed(() => `https://www.google.com/maps?q=${mapQuery.value}&output=embed`)
 
-// 地图 iframe 地址
-const mapFrameUrl = computed(() => {
-  const left = mapCenter.lng - 0.018
-  const right = mapCenter.lng + 0.018
-  const top = mapCenter.lat + 0.012
-  const bottom = mapCenter.lat - 0.012
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${left},${bottom},${right},${top}&layer=mapnik&marker=${mapCenter.lat},${mapCenter.lng}`
-})
-
-// 联系页局部文案
 const contactPageCopyByLocale = {
   zh: {
     pageTitle: '联系我们',
@@ -29,41 +14,40 @@ const contactPageCopyByLocale = {
     heroDescription: '适合发送型号清单、品牌偏好、数量、交期与项目背景。您也可以先简单描述，我们再协助整理采购方向。',
     email: '邮箱',
     phone: '电话',
-    address: '地址',
+    address: '地址与地图',
     mapTitle: '公司位置地图',
-    metrics: ['支持配件与整机询价', '支持批量采购需求', '工作日尽快响应'],
+    metrics: ['支持配件与整机询价', '支持批量采购需求', '7×24 小时快速响应'],
     stepsTitle: '沟通建议',
-    steps: ['先发型号与数量', '再确认交期与到货地', '最后细化品牌与兼容要求']
+    steps: ['先发送型号与数量', '再确认交期与到货地', '最后细化品牌与兼容要求']
   },
   en: {
     pageTitle: 'Contact',
-    heroTitle: 'Send your inquiry or sourcing requirement directly',
+    heroTitle: 'Send your inquiry or sourcing request directly',
     heroDescription: 'Suitable for model lists, preferred brands, quantity, delivery timing, and project context. A simple initial request also works.',
     email: 'Email',
     phone: 'Phone',
-    address: 'Address',
+    address: 'Address & Map',
     mapTitle: 'Company Location Map',
-    metrics: ['Supports parts and server inquiries', 'Supports volume procurement', 'Fast response on business days'],
+    metrics: ['Supports parts and server inquiries', 'Supports volume procurement', '24/7 rapid response'],
     stepsTitle: 'Recommended Flow',
     steps: ['Send models and quantity first', 'Confirm timing and delivery location', 'Then refine brand and compatibility requirements']
   },
   ru: {
     pageTitle: 'Контакты',
     heroTitle: 'Сразу отправьте запрос или закупочную потребность',
-    heroDescription: 'Подходит для списка моделей, предпочитаемых брендов, количества, сроков и проектного контекста. Можно начать и с краткого описания.',
+    heroDescription: 'Подходит для списка моделей, предпочтительных брендов, количества, сроков и проектного контекста. Можно начать и с краткого описания.',
     email: 'Email',
     phone: 'Телефон',
-    address: 'Адрес',
+    address: 'Адрес и карта',
     mapTitle: 'Карта местоположения компании',
-    metrics: ['Запросы по комплектующим и серверам', 'Поддержка оптовых закупок', 'Быстрый ответ в рабочие дни'],
-    stepsTitle: 'Рекомендованный порядок',
+    metrics: ['Запросы по комплектующим и серверам', 'Поддержка оптовых закупок', 'Быстрый ответ 24/7'],
+    stepsTitle: 'Рекомендуемый порядок',
     steps: ['Сначала отправьте модели и количество', 'Далее уточните сроки и место поставки', 'Потом согласуем бренд и совместимость']
   }
 } as const
 
 const pageCopy = computed(() => contactPageCopyByLocale[locale.value])
 
-// 询价表单状态
 const form = reactive({
   name: '',
   contact: '',
@@ -78,7 +62,6 @@ useHead(() => ({
   title: `${content.value.site.companyName} | ${pageCopy.value.pageTitle}`
 }))
 
-// 提交询价：优先走后端接口，失败时仍保留状态提示
 async function submitInquiry() {
   if (isSubmitting.value) {
     return
@@ -148,20 +131,44 @@ async function submitInquiry() {
             <div class="grid gap-4 sm:grid-cols-2">
               <div class="soft-panel">
                 <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ pageCopy.email }}</p>
-                <p class="mt-2 text-base text-slate-800 break-all">
-                  {{ runtimeConfig.public.inquiryRecipientEmail || content.site.email }}
-                </p>
+                <div class="mt-2 grid gap-2">
+                  <a
+                    v-for="email in content.site.emails"
+                    :key="email"
+                    :href="`mailto:${email}`"
+                    class="text-base text-slate-800 whitespace-nowrap transition-colors hover:text-blue-700"
+                  >
+                    {{ email }}
+                  </a>
+                </div>
               </div>
 
               <div class="soft-panel">
                 <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ pageCopy.phone }}</p>
-                <p class="mt-2 text-base text-slate-800">{{ content.site.phone }}</p>
+                <div class="mt-2 grid gap-2">
+                  <a
+                    v-for="phone in content.site.phones"
+                    :key="phone"
+                    :href="`tel:${phone}`"
+                    class="text-base text-slate-800 whitespace-nowrap transition-colors hover:text-blue-700"
+                  >
+                    {{ phone }}
+                  </a>
+                </div>
               </div>
             </div>
 
-            <div class="soft-panel">
+            <div class="soft-panel overflow-hidden">
               <p class="text-xs uppercase tracking-[0.2em] text-slate-500">{{ pageCopy.address }}</p>
-              <p class="mt-2 text-base leading-7 text-slate-800">{{ content.site.address }}</p>
+              <p class="mt-3 text-base leading-7 text-slate-800">{{ content.site.address }}</p>
+              <div class="mt-4 overflow-hidden rounded-[1.25rem] border border-slate-200 bg-white p-2 shadow-[0_12px_26px_rgba(148,163,184,0.12)]">
+                <iframe
+                  :src="mapFrameUrl"
+                  :title="pageCopy.mapTitle"
+                  class="h-64 w-full rounded-[1rem] border-0 sm:h-72"
+                  loading="lazy"
+                />
+              </div>
             </div>
 
             <div class="soft-panel">
@@ -178,18 +185,6 @@ async function submitInquiry() {
                   <p>{{ item }}</p>
                 </div>
               </div>
-            </div>
-
-            <div class="overflow-hidden rounded-[1.6rem] border border-slate-200 bg-white p-3 shadow-[0_14px_30px_rgba(148,163,184,0.12)]">
-              <iframe
-                :src="mapFrameUrl"
-                :title="pageCopy.mapTitle"
-                class="h-64 w-full rounded-[1.2rem] border-0 sm:h-72"
-                loading="lazy"
-              />
-              <p class="mt-3 text-xs text-slate-500">
-                {{ mapCenter.lat }}, {{ mapCenter.lng }}
-              </p>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { scenarioImageMap } from '~/data/media'
 // 当前语言与内容
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.params.locale as string))
@@ -79,7 +80,7 @@ useHead(() => ({
         <div class="grid gap-4">
           <div class="overflow-hidden rounded-[1.6rem] border border-slate-200 shadow-[0_16px_34px_rgba(148,163,184,0.12)]">
             <img
-              src="https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&w=1600&q=80"
+              :src="scenarioImageMap.expansion"
               :alt="pageCopy.heroAlt"
               class="h-64 w-full object-cover sm:h-72"
             >

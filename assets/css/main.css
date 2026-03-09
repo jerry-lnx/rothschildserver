@@ -58,17 +58,7 @@
     border-radius: 9999px;
     background: radial-gradient(circle, rgba(59, 130, 246, 0.12), transparent 68%);
     pointer-events: none;
-  }`r`n`r`n  .module-surface::before {`r`n    content: '';`r`n    position: absolute;`r`n    left: -4rem;`r`n    top: -4.5rem;`r`n    width: 16rem;`r`n    height: 16rem;`r`n    border-radius: 9999px;`r`n    background: radial-gradient(circle, rgba(59,130,246,0.12), transparent 68%);`r`n    pointer-events: none;`r`n  }
-
-  .module-surface::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.14) 34%, transparent 58%);
-    opacity: 0.92;
-  }
+    }
 
   .reveal-up {
     animation: reveal-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -233,5 +223,9 @@
     transform: scale(1.08);
   }
 }
+
+
+
+
 
 

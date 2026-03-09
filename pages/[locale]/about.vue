@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { aboutImageMap } from '~/data/media'
 // 当前语言与页面内容
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.params.locale as string))
@@ -76,14 +77,14 @@ useHead(() => ({
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
           <div class="overflow-hidden rounded-[1.6rem] border border-slate-200 shadow-[0_16px_34px_rgba(148,163,184,0.12)]">
             <img
-              src="https://images.unsplash.com/photo-1556075798-4825dfaaf498?auto=format&fit=crop&w=1200&q=80"
+              :src="aboutImageMap.supply"
               :alt="pageCopy.warehouseAlt"
               class="h-48 w-full object-cover lg:h-56"
             >
           </div>
           <div class="overflow-hidden rounded-[1.6rem] border border-slate-200 shadow-[0_16px_34px_rgba(148,163,184,0.12)]">
             <img
-              src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+              :src="aboutImageMap.team"
               :alt="pageCopy.operationsAlt"
               class="h-48 w-full object-cover lg:h-56"
             >

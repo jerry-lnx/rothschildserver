@@ -46,7 +46,7 @@ export const uiByLocale: Record<LocaleCode, UiContent> = {
       supply: '供应响应',
       coverage: '品类覆盖',
       focus: '业务聚焦',
-      supplyDetail: '工作日快速响应企业询价',
+      supplyDetail: '7×24 小时快速响应企业询价',
       coverageDetail: '覆盖服务器核心配件与整机',
       focusDetail: '围绕采购、补货、替换三类需求'
     },
@@ -107,7 +107,7 @@ export const uiByLocale: Record<LocaleCode, UiContent> = {
       supply: 'Supply',
       coverage: 'Coverage',
       focus: 'Focus',
-      supplyDetail: 'Fast response on business days',
+      supplyDetail: '24/7 rapid response for enterprise inquiries',
       coverageDetail: 'Core server components and systems',
       focusDetail: 'Procurement, replenishment, and replacement'
     },
@@ -168,7 +168,7 @@ export const uiByLocale: Record<LocaleCode, UiContent> = {
       supply: 'Поставка',
       coverage: 'Охват',
       focus: 'Фокус',
-      supplyDetail: 'Быстрый ответ в рабочие дни',
+      supplyDetail: 'Быстрый ответ 24/7 для корпоративных запросов',
       coverageDetail: 'Ключевые комплектующие и серверы',
       focusDetail: 'Закупка, пополнение и замена'
     },

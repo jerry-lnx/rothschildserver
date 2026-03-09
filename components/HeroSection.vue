@@ -1,10 +1,9 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
+import { heroImage } from '~/data/media'
 import type { HeroContent } from '~/types/content'
 
 defineProps<{
-  // 当前语言下的首屏文案
   content: HeroContent
-  // 当前语言代码，用于 CTA 跳转
   locale: string
 }>()
 
@@ -12,7 +11,6 @@ const route = useRoute()
 const currentLocale = computed(() => normalizeLocale(route.path.split('/')[1]))
 const ui = computed(() => getUiContent(currentLocale.value))
 
-// 首屏右侧信息卡的标题与状态文案，多语言单独维护，避免界面混入英文
 const heroPanelCopyByLocale = {
   zh: {
     eyebrow: '供货矩阵',
@@ -42,7 +40,6 @@ const heroPanelCopyByLocale = {
 
 const heroPanelCopy = computed(() => heroPanelCopyByLocale[currentLocale.value])
 
-// 首屏右侧信息卡，强调“卖什么”和“怎么供”
 const supplyCardsByLocale = {
   zh: [
     { label: '核心配件', value: 'CPU / GPU / 内存 / 网卡' },
@@ -56,7 +53,7 @@ const supplyCardsByLocale = {
   ],
   ru: [
     { label: 'Ключевые части', value: 'CPU / GPU / Память / NIC' },
-    { label: 'Сетевое соединение', value: 'Оптика / NIC / Линк-аксессуары' },
+    { label: 'Сетевое соединение', value: 'Оптика / NIC / Link accessories' },
     { label: 'Системы', value: 'SSD / HDD / Серверы' }
   ]
 } as const
@@ -68,7 +65,7 @@ const supplyCards = computed(() => supplyCardsByLocale[currentLocale.value])
   <section class="relative isolate overflow-hidden">
     <div class="absolute inset-0">
       <img
-        src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2200&q=80"
+        :src="heroImage"
         alt="Server hardware"
         class="hero-bg-zoom h-full w-full object-cover"
       >
