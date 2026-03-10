@@ -20,18 +20,18 @@ interface LocaleBundle {
 export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
   zh: {
     site: {
-      companyName: '罗斯柴智算',
-      companyNameEn: 'ROTHSCHILD',
+      companyName: '深圳罗斯柴智算科技有限公司',
+      companyNameEn: 'ROTHSCHILDSERVER',
       tagline: '服务器配件采购与供应服务商',
-      emails: ['lisa@rothschildserver.com', 'asya@rothschildserver.com'],
+      emails: ['asya@rothschildserver.com', 'lisa@rothschildserver.com'],
       phones: ['+86 17815501272', '+86 13843373030'],
       address: '深圳市龙华区观湖街道鹭湖社区观盛四路7号翰宇创新产业大楼A座807'
     },
     home: {
       hero: {
-        eyebrow: '企业级配件供应',
-        title: '专注服务器配件采购与稳定供货',
-        description: '面向企业采购、集成商与数据中心项目，提供 CPU、GPU、网卡、光模块、存储与整机等配件的持续供应与交付支持。',
+        eyebrow: '企业级服务器配件供应',
+        title: '面向企业采购的服务器配件稳定供货',
+        description: '围绕常规采购、项目交付与持续补货需求，提供 CPU、GPU、网卡、光模块、存储与服务器整机的一体化供货支持。',
         primaryCta: '查看产品中心',
         secondaryCta: '即刻联系我们'
       },
@@ -82,7 +82,7 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
       { title: '长期框架协议供货', description: '按协议周期稳定供货，降低重复询价与采购管理成本。' }
     ],
     about: {
-      intro: '罗斯柴智算专注服务器配件采购与供应，服务企业采购团队、系统集成商与数据中心项目，强调稳定供货、兼容适配与交付效率。',
+      intro: '深圳罗斯柴智算科技有限公司专注服务器配件采购与供应，服务企业采购团队、系统集成商与数据中心项目，强调稳定供货、兼容适配与交付效率。',
       pillars: [
         { title: '采购导向', description: '围绕询价、比价、下单与交付等关键流程，提供可执行的采购方案。' },
         { title: '供应链协同', description: '整合多品牌与多渠道资源，提升交付稳定性并降低断供风险。' },
@@ -90,15 +90,15 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
       ]
     },
     contact: {
-      title: '联系罗斯柴智算',
+      title: '联系深圳罗斯柴智算科技有限公司',
       description: '欢迎提交采购需求、项目清单或合作计划，我们提供 7×24 小时快速响应。',
       responsePromise: '支持企业客户询价、批量采购与长期供货合作咨询。'
     }
   },
   en: {
     site: {
-      companyName: 'ROTHSCHILD',
-      companyNameEn: 'ROTHSCHILD',
+      companyName: 'ROTHSCHILDSERVER',
+      companyNameEn: 'ROTHSCHILDSERVER',
       tagline: 'Server Component Sourcing and Supply Partner',
       emails: ['lisa@rothschildserver.com', 'asya@rothschildserver.com'],
       phones: ['+86 17815501272', '+86 13843373030'],
@@ -107,7 +107,7 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
     home: {
       hero: {
         eyebrow: 'Enterprise Component Supply',
-        title: 'Focused on Server Component Procurement and Stable Delivery',
+        title: 'Server Component Supply for Enterprise Sourcing',
         description: 'We support enterprise buyers, integrators, and data center projects with sustainable supply of CPU, GPU, NIC, optical modules, storage components, and complete servers.',
         primaryCta: 'View Product Center',
         secondaryCta: 'Contact Us Now'
@@ -159,7 +159,7 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
       { title: 'Long-Term Framework Supply', description: 'Stable contract-based supply to reduce repetitive sourcing overhead.' }
     ],
     about: {
-      intro: 'ROTHSCHILD focuses on server component procurement and supply for enterprise buyers, system integrators, and data center projects.',
+      intro: 'ROTHSCHILDSERVER focuses on server component procurement and supply for enterprise buyers, system integrators, and data center projects.',
       pillars: [
         { title: 'Procurement-Driven Service', description: 'Built around quotation, comparison, ordering, and delivery execution.' },
         { title: 'Supply Chain Coordination', description: 'Integrates multi-brand and multi-channel resources for stable fulfillment.' },
@@ -167,15 +167,15 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
       ]
     },
     contact: {
-      title: 'Talk to ROTHSCHILD',
+      title: 'Talk to ROTHSCHILDSERVER',
       description: 'Share your demand list, procurement schedule, or cooperation request. Our team provides 24/7 rapid response.',
       responsePromise: 'Support for enterprise inquiry, bulk procurement, and long-term supply cooperation.'
     }
   },
   ru: {
     site: {
-      companyName: 'ROTHSCHILD',
-      companyNameEn: 'ROTHSCHILD',
+      companyName: 'ROTHSCHILDSERVER',
+      companyNameEn: 'ROTHSCHILDSERVER',
       tagline: 'Партнер по закупке и поставке серверных комплектующих',
       emails: ['lisa@rothschildserver.com', 'asya@rothschildserver.com'],
       phones: ['+86 17815501272', '+86 13843373030'],
@@ -184,7 +184,7 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
     home: {
       hero: {
         eyebrow: 'Корпоративные поставки',
-        title: 'Закупка серверных комплектующих и стабильные поставки',
+        title: 'Серверные комплектующие для корпоративных закупок',
         description: 'Мы поддерживаем корпоративные закупки, интеграторов и проекты дата-центров: CPU, GPU, сетевые карты, оптические модули, накопители и серверы.',
         primaryCta: 'Смотреть продукты',
         secondaryCta: 'Связаться с нами сейчас'
@@ -236,7 +236,7 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
       { title: 'Долгосрочный рамочный контракт', description: 'Стабильные договорные поставки без постоянного пересогласования.' }
     ],
     about: {
-      intro: 'ROTHSCHILD специализируется на закупке и поставке серверных комплектующих для корпоративных заказчиков, интеграторов и проектов дата-центров.',
+      intro: 'ROTHSCHILDSERVER специализируется на закупке и поставке серверных комплектующих для корпоративных заказчиков, интеграторов и проектов дата-центров.',
       pillars: [
         { title: 'Ориентация на закупку', description: 'Сервис построен вокруг запроса, сравнения, размещения заказа и поставки.' },
         { title: 'Координация цепочки поставок', description: 'Объединяем мультибрендовые и многоканальные ресурсы для устойчивой поставки.' },
@@ -244,10 +244,9 @@ export const contentByLocale: Record<LocaleCode, LocaleBundle> = {
       ]
     },
     contact: {
-      title: 'Связаться с ROTHSCHILD',
+      title: 'Связаться с ROTHSCHILDSERVER',
       description: 'Отправьте список потребностей, план закупки или запрос на сотрудничество. Мы обеспечиваем быстрый ответ 24/7.',
       responsePromise: 'Поддерживаем корпоративные запросы, оптовые закупки и долгосрочное сотрудничество.'
     }
   }
 }
-

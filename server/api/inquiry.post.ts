@@ -1,9 +1,35 @@
-﻿interface InquiryBody {
+import nodemailer from 'nodemailer'
+import { normalizeLocale } from '~/composables/useSiteContent'
+
+interface InquiryBody {
   name?: string
-  contact?: string
+  company?: string
+  email?: string
+  phone?: string
   product?: string
   message?: string
   locale?: string
+}
+
+function formatBeijingTime(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('zh-CN', {
+    timeZone: 'Asia/Shanghai',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23'
+  }).formatToParts(date)
+
+  const valueByType = Object.fromEntries(
+    parts
+      .filter(part => part.type !== 'literal')
+      .map(part => [part.type, part.value])
+  ) as Record<string, string>
+
+  return `${valueByType.year}-${valueByType.month}-${valueByType.day} ${valueByType.hour}:${valueByType.minute}:${valueByType.second}`
 }
 
 export default defineEventHandler(async (event) => {
@@ -11,13 +37,15 @@ export default defineEventHandler(async (event) => {
 
   const payload = {
     name: body.name?.trim() ?? '',
-    contact: body.contact?.trim() ?? '',
+    company: body.company?.trim() ?? '',
+    email: body.email?.trim() ?? '',
+    phone: body.phone?.trim() ?? '',
     product: body.product?.trim() ?? '',
     message: body.message?.trim() ?? '',
     locale: normalizeLocale(body.locale)
   }
 
-  if (!payload.name || !payload.contact || !payload.product || !payload.message) {
+  if (!payload.name || !payload.phone || !payload.product) {
     throw createError({
       statusCode: 400,
       statusMessage: 'Missing required inquiry fields'
@@ -25,8 +53,61 @@ export default defineEventHandler(async (event) => {
   }
 
   const runtimeConfig = useRuntimeConfig(event)
+  const smtpHost = runtimeConfig.inquirySmtpHost?.trim()
+  const smtpPort = Number(runtimeConfig.inquirySmtpPort || 0)
+  const smtpSecure = `${runtimeConfig.inquirySmtpSecure}` === 'true'
+  const smtpUser = runtimeConfig.inquirySmtpUser?.trim()
+  const smtpPass = runtimeConfig.inquirySmtpPass?.trim()
+  const fromEmail = runtimeConfig.inquiryFromEmail?.trim() || smtpUser
+  const fromName = runtimeConfig.inquiryFromName?.trim() || 'ROTHSCHILDSERVER'
   const webhookUrl = runtimeConfig.inquiryWebhookUrl?.trim()
-  const recipientEmail = runtimeConfig.public.inquiryRecipientEmail?.trim()
+  const recipientEmail = runtimeConfig.inquiryRecipientEmail?.trim()
+  const recipientList = recipientEmail
+    ? recipientEmail
+        .split(',')
+        .map(item => item.trim())
+        .filter(Boolean)
+    : []
+  const submittedAt = new Date().toISOString()
+  const submittedAtBeijing = formatBeijingTime(new Date())
+
+  const subject = `【官网咨询】产品类别及型号：${payload.product || '未填写'}`
+  const messageLines = [
+    `客户名：${payload.name}`,
+    `客户公司：${payload.company || '未填写'}`,
+    `客户手机号：${payload.phone}`,
+    `客户邮箱：${payload.email || '未填写'}`,
+    `产品类别及型号：${payload.product}`,
+    `客户需求说明：${payload.message || '未填写'}`,
+    '',
+    `提交时间：${submittedAtBeijing}`
+  ]
+
+  if (smtpHost && smtpPort && smtpUser && smtpPass && fromEmail && recipientList.length) {
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure || smtpPort === 465,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass
+      }
+    })
+
+    await transporter.sendMail({
+      from: fromName ? `"${fromName}" <${fromEmail}>` : fromEmail,
+      to: recipientList,
+      replyTo: payload.email || undefined,
+      subject,
+      text: messageLines.join('\n')
+    })
+
+    return {
+      ok: true,
+      forwarded: true,
+      channel: 'smtp'
+    }
+  }
 
   if (webhookUrl) {
     await $fetch(webhookUrl, {
@@ -34,38 +115,29 @@ export default defineEventHandler(async (event) => {
       body: {
         ...payload,
         source: 'luoschai-official-site',
-        submittedAt: new Date().toISOString()
+        submittedAt
       }
     })
 
     return {
       ok: true,
-      forwarded: true
+      forwarded: true,
+      channel: 'webhook'
     }
   }
 
-  const subject = encodeURIComponent(`[${payload.locale.toUpperCase()}] ROTHSCHILD Inquiry - ${payload.product}`)
-  const bodyText = encodeURIComponent(
-    [
-      `Name / Company: ${payload.name}`,
-      `Contact: ${payload.contact}`,
-      `Product / Model: ${payload.product}`,
-      '',
-      'Message:',
-      payload.message
-    ].join('\n')
-  )
+  const mailtoSubject = encodeURIComponent(subject)
+  const bodyText = encodeURIComponent(messageLines.join('\n'))
 
   console.info('[inquiry] Received submission without webhook target.', {
     ...payload,
-    submittedAt: new Date().toISOString()
+    submittedAt
   })
 
   return {
     ok: true,
     forwarded: false,
-    mailtoUrl: recipientEmail ? `mailto:${recipientEmail}?subject=${subject}&body=${bodyText}` : '',
+    mailtoUrl: recipientList.length ? `mailto:${recipientList.join(',')}?subject=${mailtoSubject}&body=${bodyText}` : '',
     recipientEmail
   }
 })
-

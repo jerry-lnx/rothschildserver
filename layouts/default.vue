@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import faviconImage from '~/assets/images/logo_icon.png'
 
 // 当前路由：用于区分首页与内页的顶部留白
 const route = useRoute()
@@ -10,7 +9,7 @@ useHead({
     {
       rel: 'icon',
       type: 'image/png',
-      href: faviconImage
+      href: '/logo_icon.png'
     }
   ]
 })

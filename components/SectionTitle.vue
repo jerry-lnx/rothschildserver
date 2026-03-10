@@ -4,34 +4,42 @@ defineProps<{
   title: string
   description?: string
   align?: 'left' | 'center'
+  tag?: 'h1' | 'h2' | 'h3'
+  size?: 'default' | 'compact'
 }>()
 </script>
 
 <template>
   <div
-    class="max-w-4xl"
+    class="section-title max-w-4xl"
     :class="align === 'left' ? '' : 'mx-auto text-center'"
   >
-    <div class="space-y-4 sm:space-y-5">
-      <div :class="align === 'left' ? '' : 'flex justify-center'">
-        <div class="inline-flex items-center gap-3">
+    <div class="space-y-3 sm:space-y-4">
+      <div class="section-title-eyebrow-wrap" :class="align === 'left' ? '' : 'flex justify-center'">
+        <div class="section-title-eyebrow inline-flex items-center gap-3">
           <span class="h-[3px] w-10 rounded-full bg-sky-500" />
-          <span class="text-[0.95rem] font-semibold tracking-[0.08em] text-slate-700">
+          <span class="text-[0.9rem] font-semibold tracking-[0.08em] text-slate-700">
             {{ eyebrow }}
           </span>
         </div>
       </div>
 
-      <h2
-        class="max-w-5xl text-[2.05rem] font-extrabold leading-[1.08] tracking-[-0.03em] text-slate-950 sm:text-[2.55rem] lg:text-[2.95rem]"
-        :class="align === 'left' ? '' : 'mx-auto'"
+      <component
+        :is="tag ?? 'h2'"
+        class="section-title-heading max-w-5xl tracking-[-0.03em] text-slate-950"
+        :class="[
+          size === 'compact'
+            ? 'text-[1.4rem] font-semibold leading-[1.2] sm:text-[1.7rem] lg:text-[1.95rem]'
+            : 'text-[1.8rem] font-bold leading-[1.12] sm:text-[2.15rem] lg:text-[2.45rem]',
+          align === 'left' ? '' : 'mx-auto'
+        ]"
       >
         {{ title }}
-      </h2>
+      </component>
 
       <p
         v-if="description"
-        class="max-w-3xl text-[1.02rem] leading-8 text-slate-600 sm:text-[1.08rem]"
+        class="section-title-description max-w-3xl text-[0.95rem] leading-7 text-slate-600 sm:text-[1rem]"
         :class="align === 'left' ? '' : 'mx-auto'"
       >
         {{ description }}

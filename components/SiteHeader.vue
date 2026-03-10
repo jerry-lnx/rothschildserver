@@ -1,6 +1,4 @@
 ﻿<script setup lang="ts">
-import logoImage from '~/assets/images/logo.png'
-
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.path.split('/')[1]))
 const ui = computed(() => getUiContent(locale.value))
@@ -45,6 +43,8 @@ watch(
     mobileMenuOpen.value = false
   }
 )
+
+const logoImage = '/logo_small.png'
 </script>
 
 <template>
@@ -56,7 +56,7 @@ watch(
       <NuxtLink :to="`/${locale}`" class="flex min-w-0 items-center justify-self-start">
         <img
           :src="logoImage"
-          alt="ROTHSCHILD logo"
+          alt="ROTHSCHILDSERVER logo"
           class="h-[3.75rem] w-auto max-w-[15rem] object-contain sm:h-[4.1rem] sm:max-w-[17rem] lg:h-[4.45rem] lg:max-w-[18.5rem]"
         >
       </NuxtLink>

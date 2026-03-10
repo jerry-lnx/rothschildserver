@@ -56,16 +56,22 @@
   },
   runtimeConfig: {
     inquiryWebhookUrl: process.env.INQUIRY_WEBHOOK_URL || '',
-    public: {
-      inquiryRecipientEmail: process.env.INQUIRY_RECIPIENT_EMAIL || '1426585028@qq.com'
-    }
+    inquiryRecipientEmail: process.env.INQUIRY_RECIPIENT_EMAIL || '1426585028@qq.com',
+    inquirySmtpHost: process.env.INQUIRY_SMTP_HOST || '',
+    inquirySmtpPort: process.env.INQUIRY_SMTP_PORT || '465',
+    inquirySmtpSecure: process.env.INQUIRY_SMTP_SECURE || 'true',
+    inquirySmtpUser: process.env.INQUIRY_SMTP_USER || '',
+    inquirySmtpPass: process.env.INQUIRY_SMTP_PASS || '',
+    inquiryFromEmail: process.env.INQUIRY_FROM_EMAIL || '',
+    inquiryFromName: process.env.INQUIRY_FROM_NAME || 'ROTHSCHILDSERVER',
+    public: {}
   },
   app: {
     head: {
       htmlAttrs: {
         lang: 'en'
       },
-      title: 'ROTHSCHILD',
+      title: 'ROTHSCHILDSERVER',
       meta: [
         {
           name: 'viewport',
@@ -76,7 +82,7 @@
         {
           rel: 'icon',
           type: 'image/png',
-          href: '/images/logo_icon.png'
+          href: '/logo_icon.png'
         }
       ]
     }

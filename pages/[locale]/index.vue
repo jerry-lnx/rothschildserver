@@ -1,8 +1,4 @@
 ﻿<script setup lang="ts">
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Autoplay, FreeMode } from 'swiper/modules'
-import 'swiper/css'
-import 'swiper/css/free-mode'
 import { brandLogoMap, productGalleryImages, scenarioImageMap } from '~/data/media'
 
 const route = useRoute()
@@ -10,7 +6,7 @@ const locale = computed(() => normalizeLocale(route.params.locale as string))
 const content = computed(() => getSiteContent(locale.value))
 const ui = computed(() => getUiContent(locale.value))
 
-const productCards = computed(() => content.value.home.categories)
+const productCards = computed(() => content.value.home.categories.slice(0, 8))
 const categoryImages = productGalleryImages
 
 const scenarioCardsByLocale = {
@@ -90,34 +86,22 @@ const assuranceItemsByLocale = {
 
 const quoteStripByLocale = {
   zh: {
-    title: '有明确型号或采购清单吗？',
-    desc: '可直接提交型号、数量与交付时间，我们会按企业采购方式快速跟进。',
+    eyebrow: '即刻联系',
+    title: '想更快了解我们的供货能力与合作方式？',
+    desc: '欢迎把您的型号方向、采购计划或项目需求发给我们，我们会尽快与您沟通适合的供货与对接方式。',
     primary: '提交询价',
-    secondary: '查看产品中心',
-    eyebrow: '快速询价',
-    lineOne: 'CPU / GPU / 网卡 / 光模块',
-    lineTwo: 'SSD / HDD / 内存 / 服务器整机',
-    lineThree: '支持批量采购与持续补货'
   },
   en: {
-    title: 'Already have a model list or BOM?',
-    desc: 'Send us models, quantities, and target delivery timing for a faster follow-up.',
+    eyebrow: 'Quick Contact',
+    title: 'Want to get to know us faster?',
+    desc: 'Send the model, quantity, timing, or project background. We will assess supply availability and respond quickly.',
     primary: 'Send Inquiry',
-    secondary: 'Browse Products',
-    eyebrow: 'Quick Inquiry',
-    lineOne: 'CPU / GPU / NIC / Optical',
-    lineTwo: 'SSD / HDD / Memory / Server',
-    lineThree: 'Support bulk procurement and recurring supply'
   },
   ru: {
-    title: 'Уже есть список моделей или BOM?',
-    desc: 'Отправьте модели, количество и срок поставки для быстрого ответа.',
+    eyebrow: 'Быстрый контакт',
+    title: 'Хотите быстрее понять, как мы работаем?',
+    desc: 'Отправьте модели, количество, сроки или описание проекта, и мы быстро оценим возможность поставки и свяжемся с вами.',
     primary: 'Отправить запрос',
-    secondary: 'Смотреть продукты',
-    eyebrow: 'Быстрый запрос',
-    lineOne: 'CPU / GPU / NIC / Оптика',
-    lineTwo: 'SSD / HDD / Память / Серверы',
-    lineThree: 'Поддержка оптовых закупок и регулярных поставок'
   }
 } as const
 
@@ -128,7 +112,6 @@ const brandCards = computed(() =>
   }))
 )
 
-const brandCarouselModules = [Autoplay, FreeMode]
 const scenarioCards = computed(() => scenarioCardsByLocale[locale.value])
 const assuranceItems = computed(() => assuranceItemsByLocale[locale.value])
 const quoteStrip = computed(() => quoteStripByLocale[locale.value])
@@ -152,29 +135,35 @@ useHead(() => ({
     <section class="-mt-20 pb-8 md:-mt-24 md:pb-10">
       <div class="shell">
         <div class="module-surface reveal-up relative shadow-[0_28px_56px_rgba(148,163,184,0.18)] before:pointer-events-none before:absolute before:inset-x-12 before:-top-8 before:h-16 before:rounded-full before:bg-white/65 before:blur-3xl">
-          <div class="max-w-3xl">
-            <SectionTitle
-              :eyebrow="ui.sections.productsEyebrow"
-              :title="ui.sections.productsTitle"
-              :description="ui.sections.productsDescription"
-              align="left"
-            />
+          <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div class="max-w-3xl">
+              <SectionTitle
+                :eyebrow="ui.sections.productsEyebrow"
+                :title="ui.sections.productsTitle"
+                :description="ui.sections.productsDescription"
+                align="left"
+              />
+            </div>
+
+            <div class="flex justify-start lg:justify-end">
+              <NuxtLink
+                :to="`/${locale}/products`"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
+              >
+                <span>全部产品</span>
+                <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4 stroke-current" aria-hidden="true">
+                  <path d="M4.75 10H15.25" stroke-width="1.7" stroke-linecap="round" />
+                  <path d="M10.75 5.5L15.25 10L10.75 14.5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </NuxtLink>
+            </div>
           </div>
 
-          <div class="mt-5 flex justify-start sm:justify-end">
-            <NuxtLink
-              :to="`/${locale}/products`"
-              class="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
-            >
-              {{ ui.nav.products }}
-            </NuxtLink>
-          </div>
-
-          <div class="stagger-grid mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div class="stagger-grid mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <article
               v-for="(item, index) in productCards"
               :key="item.title"
-              class="sheen-card group overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white p-0 shadow-[0_14px_28px_rgba(148,163,184,0.1)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(148,163,184,0.16)]"
+              class="sheen-card group flex h-full flex-col overflow-hidden rounded-[1.35rem] border border-slate-200 bg-white p-0 shadow-[0_14px_28px_rgba(148,163,184,0.1)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(148,163,184,0.16)]"
             >
               <div class="relative h-44 overflow-hidden sm:h-48">
                 <img
@@ -187,8 +176,8 @@ useHead(() => ({
                   <p class="text-lg font-semibold text-white sm:text-xl">{{ item.title }}</p>
                 </div>
               </div>
-              <div class="p-5 sm:p-6">
-                <p class="text-sm leading-7 text-slate-600">{{ item.description }}</p>
+              <div class="flex flex-1 flex-col p-5 sm:p-6">
+                <p class="min-h-[4.5rem] text-sm leading-7 text-slate-600">{{ item.description }}</p>
                 <div class="mt-4 flex flex-wrap gap-2">
                   <span
                     v-for="highlight in item.highlights"
@@ -208,14 +197,31 @@ useHead(() => ({
     <section class="section-divider section-gap pt-4">
       <div class="shell">
         <div class="module-surface reveal-up">
-          <SectionTitle
-            :eyebrow="ui.sections.solutionsEyebrow"
-            :title="ui.sections.solutionsTitle"
-            :description="ui.sections.solutionsDescription"
-            align="left"
-          />
+          <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <div class="max-w-3xl">
+              <SectionTitle
+                :eyebrow="ui.sections.solutionsEyebrow"
+                :title="ui.sections.solutionsTitle"
+                :description="ui.sections.solutionsDescription"
+                align="left"
+              />
+            </div>
 
-          <div class="stagger-grid mt-8 grid gap-4 lg:grid-cols-3">
+            <div class="flex justify-start lg:justify-end">
+              <NuxtLink
+                :to="`/${locale}/solutions`"
+                class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-100"
+              >
+                <span>更多场景</span>
+                <svg viewBox="0 0 20 20" fill="none" class="h-4 w-4 stroke-current" aria-hidden="true">
+                  <path d="M4.75 10H15.25" stroke-width="1.7" stroke-linecap="round" />
+                  <path d="M10.75 5.5L15.25 10L10.75 14.5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </NuxtLink>
+            </div>
+          </div>
+
+          <div class="stagger-grid mt-5 grid gap-4 lg:grid-cols-3">
             <article
               v-for="scenario in scenarioCards"
               :key="scenario.title"
@@ -229,6 +235,36 @@ useHead(() => ({
                 <p class="mt-3 text-sm leading-7 text-slate-600">{{ scenario.desc }}</p>
               </div>
             </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-divider section-gap pt-2">
+      <div class="shell">
+        <div class="module-surface reveal-up overflow-hidden">
+          <SectionTitle
+            :eyebrow="ui.sections.brandsEyebrow"
+            :title="ui.sections.brandsTitle"
+            :description="ui.sections.brandsDescription"
+            align="left"
+          />
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div
+              v-for="brand in brandCards"
+              :key="brand.name"
+              class="flex h-20 items-center gap-4 rounded-2xl border border-slate-200 bg-white px-5 shadow-sm"
+            >
+              <img
+                v-if="brand.logo"
+                :src="brand.logo"
+                :alt="brand.name"
+                class="h-8 w-8 shrink-0 object-contain"
+                loading="lazy"
+              >
+              <span class="text-xl font-semibold tracking-[0.04em] text-slate-800">{{ brand.name }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -258,56 +294,11 @@ useHead(() => ({
 
     <section class="section-divider section-gap pt-2">
       <div class="shell">
-        <div class="module-surface reveal-up overflow-hidden">
-          <SectionTitle
-            :eyebrow="ui.sections.brandsEyebrow"
-            :title="ui.sections.brandsTitle"
-            :description="ui.sections.brandsDescription"
-            align="left"
-          />
-
-          <div class="brand-marquee-wrap mt-8 overflow-hidden rounded-2xl bg-slate-50/80 py-5">
-            <Swiper
-              class="brand-swiper"
-              :modules="brandCarouselModules"
-              loop
-              :loop-additional-slides="brandCards.length"
-              slides-per-view="auto"
-              :space-between="16"
-              :speed="5200"
-              :allow-touch-move="false"
-              :free-mode="{ enabled: true, momentum: false }"
-              :autoplay="{ delay: 0, disableOnInteraction: false, pauseOnMouseEnter: true }"
-            >
-              <SwiperSlide
-                v-for="brand in brandCards"
-                :key="brand.name"
-                class="brand-swiper-slide"
-              >
-                <div class="flex h-20 items-center gap-4 rounded-2xl border border-slate-200 bg-white px-6 shadow-sm">
-                  <img
-                    v-if="brand.logo"
-                    :src="brand.logo"
-                    :alt="brand.name"
-                    class="h-8 w-8 shrink-0 object-contain"
-                    loading="lazy"
-                  >
-                  <span class="text-xl font-semibold tracking-[0.04em] text-slate-800">{{ brand.name }}</span>
-                </div>
-              </SwiperSlide>
-            </Swiper>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-divider section-gap pt-2">
-      <div class="shell">
         <div class="page-hero reveal-up-delayed border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#eef4ff)] text-slate-900">
           <div class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <p class="text-sm font-semibold uppercase tracking-[0.24em] text-blue-700">{{ quoteStrip.eyebrow }}</p>
-              <h2 class="mt-3 text-2xl font-semibold sm:text-3xl">{{ quoteStrip.title }}</h2>
+              <p class="text-sm font-semibold tracking-[0.12em] text-blue-700">{{ quoteStrip.eyebrow }}</p>
+              <h2 class="mt-3 text-xl font-semibold text-slate-900 sm:text-2xl">{{ quoteStrip.title }}</h2>
               <p class="mt-4 max-w-3xl text-sm leading-7 text-slate-600">{{ quoteStrip.desc }}</p>
             </div>
             <div class="flex flex-wrap gap-3">
@@ -315,21 +306,9 @@ useHead(() => ({
                 :to="`/${locale}/contact`"
                 class="rounded-full bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
               >
-                {{ quoteStrip.primary }}
-              </NuxtLink>
-              <NuxtLink
-                :to="`/${locale}/products`"
-                class="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-slate-50"
-              >
-                {{ quoteStrip.secondary }}
+                {{ content.home.hero.secondaryCta }}
               </NuxtLink>
             </div>
-          </div>
-
-          <div class="mt-6 grid gap-3 md:grid-cols-3">
-            <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">{{ quoteStrip.lineOne }}</div>
-            <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">{{ quoteStrip.lineTwo }}</div>
-            <div class="rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">{{ quoteStrip.lineThree }}</div>
           </div>
         </div>
       </div>

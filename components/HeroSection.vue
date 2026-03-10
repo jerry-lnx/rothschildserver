@@ -14,9 +14,9 @@ const ui = computed(() => getUiContent(currentLocale.value))
 const heroPanelCopyByLocale = {
   zh: {
     eyebrow: '供货矩阵',
-    title: '面向企业采购可直接落地',
+    title: '围绕采购清单可直接对接',
     deliveryTag: '库存',
-    deliveryTitle: '现货与期货组合供给',
+    deliveryTitle: '现货与期货组合供货',
     supportTag: '时效',
     supportTitle: '快速响应与交付'
   },
@@ -39,6 +39,30 @@ const heroPanelCopyByLocale = {
 } as const
 
 const heroPanelCopy = computed(() => heroPanelCopyByLocale[currentLocale.value])
+
+const heroTitleClass = computed(() => {
+  if (currentLocale.value === 'zh') {
+    return 'sm:text-[3rem] lg:text-[4.2rem] lg:leading-[1.1] tracking-[0.015em]'
+  }
+
+  return 'sm:text-[2.45rem] lg:text-[3.3rem] lg:leading-[1.12] tracking-[0.01em]'
+})
+
+const heroMetricCopyByLocale = computed(() => {
+  if (currentLocale.value === 'zh') {
+    return [
+      { label: '供应响应', value: '7×24 小时快速响应咨询' },
+      { label: '品类覆盖', value: '覆盖服务器核心配件与整机' },
+      { label: '业务聚焦', value: '聚焦采购、补货与替换需求' }
+    ]
+  }
+
+  return [
+    { label: ui.value.metrics.supply, value: ui.value.metrics.supplyDetail },
+    { label: ui.value.metrics.coverage, value: ui.value.metrics.coverageDetail },
+    { label: ui.value.metrics.focus, value: ui.value.metrics.focusDetail }
+  ]
+})
 
 const supplyCardsByLocale = {
   zh: [
@@ -83,7 +107,7 @@ const supplyCards = computed(() => supplyCardsByLocale[currentLocale.value])
             {{ content.eyebrow }}
           </p>
 
-          <h1 class="mt-5 max-w-4xl text-3xl font-bold tracking-tight text-white sm:text-5xl lg:text-7xl">
+          <h1 :class="heroTitleClass" class="mt-5 max-w-4xl text-3xl font-bold text-white sm:leading-[1.08]">
             {{ content.title }}
           </h1>
 
@@ -91,7 +115,7 @@ const supplyCards = computed(() => supplyCardsByLocale[currentLocale.value])
             {{ content.description }}
           </p>
 
-          <div class="mt-7 flex flex-wrap gap-3 sm:gap-4">
+          <div class="mt-6 flex flex-wrap gap-3 sm:gap-4">
             <NuxtLink
               :to="`/${locale}/products`"
               class="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-slate-900 shadow-[0_10px_22px_rgba(15,23,42,0.2)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-slate-100 sm:px-6 sm:py-3"
@@ -106,18 +130,14 @@ const supplyCards = computed(() => supplyCardsByLocale[currentLocale.value])
             </NuxtLink>
           </div>
 
-          <div class="mt-8 grid max-w-3xl gap-3 sm:grid-cols-3">
-            <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
-              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">{{ ui.metrics.supply }}</p>
-              <p class="mt-2 text-sm font-semibold text-white">{{ ui.metrics.supplyDetail }}</p>
-            </div>
-            <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
-              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">{{ ui.metrics.coverage }}</p>
-              <p class="mt-2 text-sm font-semibold text-white">{{ ui.metrics.coverageDetail }}</p>
-            </div>
-            <div class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
-              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">{{ ui.metrics.focus }}</p>
-              <p class="mt-2 text-sm font-semibold text-white">{{ ui.metrics.focusDetail }}</p>
+          <div class="mt-6 grid max-w-3xl gap-3 sm:grid-cols-3">
+            <div
+              v-for="item in heroMetricCopyByLocale"
+              :key="item.label"
+              class="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm"
+            >
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-white/70">{{ item.label }}</p>
+              <p class="mt-2 text-sm font-semibold text-white">{{ item.value }}</p>
             </div>
           </div>
         </div>

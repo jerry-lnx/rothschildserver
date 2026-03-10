@@ -1,6 +1,4 @@
 ﻿<script setup lang="ts">
-import logoImage from '~/assets/images/logo.png'
-
 const route = useRoute()
 const locale = computed(() => normalizeLocale(route.path.split('/')[1]))
 const content = computed(() => getSiteContent(locale.value))
@@ -41,6 +39,7 @@ const footerLabelsByLocale = {
 
 const footerCategories = computed(() => footerCategoriesByLocale[locale.value])
 const footerLabels = computed(() => footerLabelsByLocale[locale.value])
+const logoImage = '/logo_small.png'
 </script>
 
 <template>
@@ -54,7 +53,7 @@ const footerLabels = computed(() => footerLabelsByLocale[locale.value])
         <div class="relative grid gap-10 lg:grid-cols-[1.1fr_0.72fr_0.9fr_1.38fr] lg:gap-8">
           <div class="lg:pr-6">
             <div class="rounded-[1.75rem] border border-slate-800/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(15,23,42,0.06))] p-6 shadow-[0_18px_40px_rgba(2,6,23,0.18)]">
-              <img :src="logoImage" alt="ROTHSCHILD logo" class="h-16 w-auto object-contain sm:h-20">
+              <img :src="logoImage" alt="ROTHSCHILDSERVER logo" class="h-16 w-auto object-contain sm:h-20">
               <p class="mt-6 text-sm leading-7 text-slate-300">
                 {{ footerLabels.summary }}
               </p>
