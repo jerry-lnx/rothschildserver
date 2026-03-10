@@ -1,5 +1,5 @@
 {
-  "name": "luoschai-official-site",
+  "name": "rothschild-official-site",
   "private": true,
   "type": "module",
   "scripts": {
@@ -7,7 +7,7 @@
     "build": "nuxt build",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "start": "node .output/server/index.mjs",
+    "start": "node --env-file=.env .output/server/index.mjs",
     "clean": "nuxi cleanup"
   },
   "dependencies": {

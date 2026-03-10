@@ -53,15 +53,17 @@ export default defineEventHandler(async (event) => {
   }
 
   const runtimeConfig = useRuntimeConfig(event)
-  const smtpHost = runtimeConfig.inquirySmtpHost?.trim()
-  const smtpPort = Number(runtimeConfig.inquirySmtpPort || 0)
-  const smtpSecure = `${runtimeConfig.inquirySmtpSecure}` === 'true'
-  const smtpUser = runtimeConfig.inquirySmtpUser?.trim()
-  const smtpPass = runtimeConfig.inquirySmtpPass?.trim()
-  const fromEmail = runtimeConfig.inquiryFromEmail?.trim() || smtpUser
-  const fromName = runtimeConfig.inquiryFromName?.trim() || 'ROTHSCHILDSERVER'
-  const webhookUrl = runtimeConfig.inquiryWebhookUrl?.trim()
-  const recipientEmail = runtimeConfig.inquiryRecipientEmail?.trim()
+  const env = process.env
+
+  const smtpHost = env.NUXT_INQUIRY_SMTP_HOST?.trim() || env.INQUIRY_SMTP_HOST?.trim() || runtimeConfig.inquirySmtpHost?.trim()
+  const smtpPort = Number(env.NUXT_INQUIRY_SMTP_PORT || env.INQUIRY_SMTP_PORT || runtimeConfig.inquirySmtpPort || 0)
+  const smtpSecure = `${env.NUXT_INQUIRY_SMTP_SECURE || env.INQUIRY_SMTP_SECURE || runtimeConfig.inquirySmtpSecure}` === 'true'
+  const smtpUser = env.NUXT_INQUIRY_SMTP_USER?.trim() || env.INQUIRY_SMTP_USER?.trim() || runtimeConfig.inquirySmtpUser?.trim()
+  const smtpPass = env.NUXT_INQUIRY_SMTP_PASS?.trim() || env.INQUIRY_SMTP_PASS?.trim() || runtimeConfig.inquirySmtpPass?.trim()
+  const fromEmail = env.NUXT_INQUIRY_FROM_EMAIL?.trim() || env.INQUIRY_FROM_EMAIL?.trim() || runtimeConfig.inquiryFromEmail?.trim() || smtpUser
+  const fromName = env.NUXT_INQUIRY_FROM_NAME?.trim() || env.INQUIRY_FROM_NAME?.trim() || runtimeConfig.inquiryFromName?.trim() || 'ROTHSCHILDSERVER'
+  const webhookUrl = env.NUXT_INQUIRY_WEBHOOK_URL?.trim() || env.INQUIRY_WEBHOOK_URL?.trim() || runtimeConfig.inquiryWebhookUrl?.trim()
+  const recipientEmail = env.NUXT_INQUIRY_RECIPIENT_EMAIL?.trim() || env.INQUIRY_RECIPIENT_EMAIL?.trim() || runtimeConfig.inquiryRecipientEmail?.trim()
   const recipientList = recipientEmail
     ? recipientEmail
         .split(',')
@@ -114,7 +116,7 @@ export default defineEventHandler(async (event) => {
       method: 'POST',
       body: {
         ...payload,
-        source: 'luoschai-official-site',
+        source: 'rothschild-official-site',
         submittedAt
       }
     })
